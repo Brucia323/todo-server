@@ -8,8 +8,8 @@ import reactor.core.publisher.Flux;
 public class TodoRecordService {
   @Resource private TodoRecordRepository repository;
 
-  public Flux<TodoRecordDTO> getTodoRecordsByTodoId(Integer todoId) {
-    return repository.findByTodoId(todoId).map(TodoRecordDTO::new);
+  public Flux<TodoRecord> getTodoRecordsByTodoId(Integer todoId) {
+    return repository.findByTodoId(todoId);
   }
 
   public Flux<TodoRecord> getTodoRecordsByUserId(Integer userId) {
