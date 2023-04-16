@@ -8,34 +8,28 @@ import reactor.core.publisher.Mono;
 @Service
 public class TodoService {
   @Resource private TodoRepository repository;
-  @Resource private TodoRecordService service;
 
-  public Mono<TodoDTO> getTodoById(Integer todoId) {
-    return repository
-        .findById(todoId)
-        .map(
-            todo -> {
-              Flux<TodoRecordDTO> todoRecordsDTO = service.getTodoRecordsByTodoId(todoId);
-              return new TodoDTO(todo, todoRecordsDTO);
-            });
+    public Mono<Todo> getTodoById(Integer id) {
+    return repository.findById(id);
   }
 
-  public Flux<TodoDTO> getTodosByUser(Integer userId) {
-    return repository.findByUserId(userId).map(TodoDTO::new);
+  public Flux<Todo> getTodosByUser(Integer userId) {
+    return repository.findByUserId(userId);
   }
 
-  public Mono<TodoDTO> createTodo(TodoDTO todoDTO) {
+  public Mono<Todo> createTodo(TodoDTO todoDTO) {
     Todo todo =
         new Todo(
             todoDTO.getUserId(),
+            todoDTO.getName(),
             todoDTO.getBeginTime(),
             todoDTO.getPlannedEndTime(),
             todoDTO.getTotalAmount(),
             todoDTO.getDescription());
-    return repository.save(todo).map(TodoDTO::new);
+    return repository.save(todo);
   }
 
-  public Mono<TodoDTO> updateTodo(TodoDTO todoDTO) {
+  public Mono<Todo> updateTodo(TodoDTO todoDTO) {
     return repository
         .findById(todoDTO.getId())
         .map(
@@ -48,11 +42,10 @@ public class TodoService {
               todo.setDescription(todoDTO.getDescription());
               return todo;
             })
-        .flatMap(repository::save)
-        .map(TodoDTO::new);
+        .flatMap(repository::save);
   }
 
-  public Mono<Void> deleteTodo(TodoDTO todoDTO) {
-    return repository.deleteById(todoDTO.getId());
+  public Mono<Void> deleteTodo(Integer id) {
+    return repository.deleteById(id);
   }
 }
