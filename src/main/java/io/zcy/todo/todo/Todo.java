@@ -10,6 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 public class Todo {
   @Id private Integer id;
   private Integer userId;
+  private String name;
   private LocalDateTime beginTime;
   private LocalDateTime plannedEndTime;
   private LocalDateTime actualEndTime;
@@ -23,11 +24,13 @@ public class Todo {
 
   public Todo(
       Integer userId,
+      String name,
       LocalDateTime beginTime,
       LocalDateTime plannedEndTime,
       Integer totalAmount,
       String description) {
     this.userId = userId;
+    this.name = name;
     this.beginTime = beginTime;
     this.plannedEndTime = plannedEndTime;
     this.totalAmount = totalAmount;
@@ -37,6 +40,7 @@ public class Todo {
   public Todo(
       Integer id,
       Integer userId,
+      String name,
       LocalDateTime beginTime,
       LocalDateTime plannedEndTime,
       LocalDateTime actualEndTime,
@@ -47,6 +51,7 @@ public class Todo {
       LocalDateTime updateTime) {
     this.id = id;
     this.userId = userId;
+    this.name = name;
     this.beginTime = beginTime;
     this.plannedEndTime = plannedEndTime;
     this.actualEndTime = actualEndTime;
@@ -71,6 +76,14 @@ public class Todo {
 
   public void setUserId(Integer userId) {
     this.userId = userId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public LocalDateTime getBeginTime() {
@@ -144,6 +157,9 @@ public class Todo {
         + id
         + ", userId="
         + userId
+        + ", name='"
+        + name
+        + '\''
         + ", beginTime="
         + beginTime
         + ", plannedEndTime="
