@@ -1,11 +1,11 @@
 package io.zcy.todo.todo;
 
 import java.time.LocalDateTime;
-import reactor.core.publisher.Flux;
 
 public class TodoDTO {
   private Integer id;
   private Integer userId;
+  private String name;
   private LocalDateTime beginTime;
   private LocalDateTime plannedEndTime;
   private LocalDateTime actualEndTime;
@@ -14,13 +14,13 @@ public class TodoDTO {
   private String description;
   private LocalDateTime createTime;
   private LocalDateTime updateTime;
-  private Flux<TodoRecordDTO> records;
 
   public TodoDTO() {}
 
   public TodoDTO(
       Integer id,
       Integer userId,
+      String name,
       LocalDateTime beginTime,
       LocalDateTime plannedEndTime,
       LocalDateTime actualEndTime,
@@ -28,10 +28,10 @@ public class TodoDTO {
       Integer totalAmount,
       String description,
       LocalDateTime createTime,
-      LocalDateTime updateTime,
-      Flux<TodoRecordDTO> records) {
+      LocalDateTime updateTime) {
     this.id = id;
     this.userId = userId;
+    this.name = name;
     this.beginTime = beginTime;
     this.plannedEndTime = plannedEndTime;
     this.actualEndTime = actualEndTime;
@@ -40,26 +40,12 @@ public class TodoDTO {
     this.description = description;
     this.createTime = createTime;
     this.updateTime = updateTime;
-    this.records = records;
-  }
-
-  public TodoDTO(Todo todo, Flux<TodoRecordDTO> records) {
-    this.id = todo.getId();
-    this.userId = todo.getUserId();
-    this.beginTime = todo.getBeginTime();
-    this.plannedEndTime = todo.getPlannedEndTime();
-    this.actualEndTime = todo.getActualEndTime();
-    this.currentAmount = todo.getCurrentAmount();
-    this.totalAmount = todo.getTotalAmount();
-    this.description = todo.getDescription();
-    this.createTime = todo.getCreateTime();
-    this.updateTime = todo.getUpdateTime();
-    this.records = records;
   }
 
   public TodoDTO(Todo todo) {
     this.id = todo.getId();
     this.userId = todo.getUserId();
+    this.name = todo.getName();
     this.beginTime = todo.getBeginTime();
     this.plannedEndTime = todo.getPlannedEndTime();
     this.actualEndTime = todo.getActualEndTime();
@@ -84,6 +70,14 @@ public class TodoDTO {
 
   public void setUserId(Integer userId) {
     this.userId = userId;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public LocalDateTime getBeginTime() {
@@ -157,6 +151,9 @@ public class TodoDTO {
         + id
         + ", userId="
         + userId
+        + ", name='"
+        + name
+        + '\''
         + ", beginTime="
         + beginTime
         + ", plannedEndTime="
