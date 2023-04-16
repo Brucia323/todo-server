@@ -10,57 +10,50 @@ import reactor.core.publisher.Mono;
 public class UserService {
   @Resource private UserRepository repository;
 
-  public Mono<UserDTO> getUserById(UserDTO userDTO) {
-    return repository.findById(userDTO.getId()).map(UserDTO::new);
+  public Mono<User> getUserById(Integer id) {
+    return repository.findById(id);
   }
 
-  public Mono<UserDTO> createUser(UserDTO userDTO) {
+  public Mono<User> getUserByEmail(UserDTO userDTO) {
+    return repository.findByEmail(userDTO.getEmail());
+  }
+
+  public Mono<User> createUser(UserDTO userDTO) {
     return repository
         .findByEmail(userDTO.getEmail())
-        .map(Optional::ofNullable)
         .flatMap(
-            optional -> {
-              if (optional.isPresent()) {
-                User user = optional.get();
+            user -> {
+              if (user != null) {
                 return Mono.just(user);
               }
-              String password = userDTO.getPassword();
-              String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(10));
-              User user = new User(userDTO.getName(), userDTO.getEmail(), passwordHash);
+              String passwordHash = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
+              user = new User(userDTO.getName(), userDTO.getEmail(), passwordHash);
               return repository.save(user);
-            })
-        .map(UserDTO::new);
+            });
   }
 
-  public Mono<UserDTO> updateUser(UserDTO userDTO) {
+  public Mono<User> updateUser(UserDTO userDTO) {
     return repository
         .findById(userDTO.getId())
         .map(
             user -> {
-              String name = userDTO.getName();
-              String email = userDTO.getEmail();
               String password = userDTO.getPassword();
-              String timePerWeek = userDTO.getTimePerWeek();
-              if (name != null) {
-                user.setName(name);
-              }
-              if (email != null) {
-                user.setEmail(email);
-              }
+
+              user.setName(userDTO.getName());
+              user.setEmail(userDTO.getEmail());
+              user.setTimePerWeek(userDTO.getTimePerWeek());
+
               if (password != null) {
                 String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(10));
                 user.setPasswordHash(passwordHash);
               }
-              if (timePerWeek != null) {
-                user.setTimePerWeek(timePerWeek);
-              }
+
               return user;
             })
-        .flatMap(repository::save)
-        .map(UserDTO::new);
+        .flatMap(repository::save);
   }
 
-  public Mono<Void> deleteUser(UserDTO userDTO) {
-    return repository.deleteById(userDTO.getId());
+  public Mono<Void> deleteUser(Integer id) {
+    return repository.deleteById(id);
   }
 }
