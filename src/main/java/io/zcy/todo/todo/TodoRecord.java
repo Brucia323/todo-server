@@ -8,82 +8,99 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("todo_record")
 public class TodoRecord {
-    @Id private Integer id;
-    private Integer userId;
-    private Integer todoId;
-    private Integer currentAmount;
-    @CreatedDate private LocalDateTime createTime;
-    @LastModifiedDate private LocalDateTime updateTime;
+  @Id private Integer id;
+  private Integer userId;
+  private Integer todoId;
+  private Integer currentAmount;
+  @CreatedDate private LocalDateTime createTime;
+  @LastModifiedDate private LocalDateTime updateTime;
 
-    public TodoRecord() {
-    }
+  public TodoRecord() {}
 
-    public TodoRecord(Integer id, Integer userId, Integer todoId, Integer currentAmount, LocalDateTime createTime, LocalDateTime updateTime) {
-        this.id = id;
-        this.userId = userId;
-        this.todoId = todoId;
-        this.currentAmount = currentAmount;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
+  public TodoRecord(Integer userId, Integer todoId, Integer currentAmount) {
+    this.userId = userId;
+    this.todoId = todoId;
+    this.currentAmount = currentAmount;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public TodoRecord(
+      Integer id,
+      Integer userId,
+      Integer todoId,
+      Integer currentAmount,
+      LocalDateTime createTime,
+      LocalDateTime updateTime) {
+    this.id = id;
+    this.userId = userId;
+    this.todoId = todoId;
+    this.currentAmount = currentAmount;
+    this.createTime = createTime;
+    this.updateTime = updateTime;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public Integer getUserId() {
-        return userId;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+  public Integer getUserId() {
+    return userId;
+  }
 
-    public Integer getTodoId() {
-        return todoId;
-    }
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
 
-    public void setTodoId(Integer todoId) {
-        this.todoId = todoId;
-    }
+  public Integer getTodoId() {
+    return todoId;
+  }
 
-    public Integer getCurrentAmount() {
-        return currentAmount;
-    }
+  public void setTodoId(Integer todoId) {
+    this.todoId = todoId;
+  }
 
-    public void setCurrentAmount(Integer currentAmount) {
-        this.currentAmount = currentAmount;
-    }
+  public Integer getCurrentAmount() {
+    return currentAmount;
+  }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
+  public void setCurrentAmount(Integer currentAmount) {
+    this.currentAmount = currentAmount;
+  }
 
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
+  public LocalDateTime getCreateTime() {
+    return createTime;
+  }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
+  public void setCreateTime(LocalDateTime createTime) {
+    this.createTime = createTime;
+  }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
+  public LocalDateTime getUpdateTime() {
+    return updateTime;
+  }
 
-    @Override
-    public String toString() {
-        return "TodoRecord{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", todoId=" + todoId +
-                ", currentAmount=" + currentAmount +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
+  public void setUpdateTime(LocalDateTime updateTime) {
+    this.updateTime = updateTime;
+  }
+
+  @Override
+  public String toString() {
+    return "TodoRecord{"
+        + "id="
+        + id
+        + ", userId="
+        + userId
+        + ", todoId="
+        + todoId
+        + ", currentAmount="
+        + currentAmount
+        + ", createTime="
+        + createTime
+        + ", updateTime="
+        + updateTime
+        + '}';
+  }
 }
