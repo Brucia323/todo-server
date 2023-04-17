@@ -3,6 +3,7 @@ package io.zcy.todo.todo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class TodoRecordService {
@@ -14,5 +15,11 @@ public class TodoRecordService {
 
   public Flux<TodoRecord> getTodoRecordsByUserId(Integer userId) {
     return repository.findByUserId(userId);
+  }
+
+  public Mono<TodoRecord> createTodoRecord(
+      TodoRecordDTO todoRecordDTO, Integer userId, Integer todoId) {
+    TodoRecord todoRecord = new TodoRecord(userId, todoId, todoRecordDTO.getCurrentAmount());
+    return repository.save(todoRecord);
   }
 }
