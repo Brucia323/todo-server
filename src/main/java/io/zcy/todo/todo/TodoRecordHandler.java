@@ -22,12 +22,11 @@ public class TodoRecordHandler {
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Integer todoId = Integer.valueOf(request.pathVariable("id"));
-    return request
-        .bodyToMono(TodoRecordDTO.class)
-        .flatMap(todoRecordDTO -> service.createTodoRecord(todoRecordDTO, userId, todoId))
-        .map(TodoRecordDTO::new)
-        .flatMap(
-            todoRecordDTO ->
-                ServerResponse.status(HttpStatus.CREATED).body(todoRecordDTO, TodoRecordDTO.class));
+    Mono<TodoRecordDTO> todoRecordDTO =
+        request
+            .bodyToMono(TodoRecordDTO.class)
+            .flatMap(todoRecordDTO1 -> service.createTodoRecord(todoRecordDTO1, userId, todoId))
+            .map(TodoRecordDTO::new);
+    return ServerResponse.status(HttpStatus.CREATED).body(todoRecordDTO, TodoRecordDTO.class);
   }
 }
