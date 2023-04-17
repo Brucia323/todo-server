@@ -6,5 +6,5 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface TodoRepository extends ReactiveCrudRepository<Todo, Integer> {
-    Flux<Todo> findByUserId(Integer userId);
+  Flux<Todo> findByUserId(Integer userId);
 }
