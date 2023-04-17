@@ -15,6 +15,9 @@ on:
 
 permissions:
   contents: read
+  
+secrets:
+  QODANA_TOKEN: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdhbml6YXRpb24iOiJBNm5XeSIsInByb2plY3QiOiJBTlpFYiIsInRva2VuIjoiM29iYXIifQ.P7aDO3hX4NVX49clD32kNupTKRJjQ-Q3oc3O5wqmE7Q'
 
 jobs:
   build:
@@ -45,3 +48,7 @@ jobs:
       uses: gradle/gradle-build-action@v2.4.0
       with:
         arguments: build
+    - name: 'Qodana Scan'
+      uses: JetBrains/qodana-action@main
+      env:
+        QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
