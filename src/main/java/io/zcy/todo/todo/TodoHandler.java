@@ -17,10 +17,9 @@ public class TodoHandler {
   @Resource private TodoService service;
 
   public Mono<ServerResponse> getTodoById(ServerRequest request) {
-    return Mono.just(Integer.valueOf(request.pathVariable("id")))
-        .flatMap(service::getTodoById)
-        .map(TodoDTO::new)
-        .flatMap(todoDTO -> ServerResponse.ok().body(todoDTO, TodoDTO.class));
+    Integer id = Integer.valueOf(request.pathVariable("id"));
+    Mono<TodoDTO> todoDTO = service.getTodoById(id).map(TodoDTO::new);
+    return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
 
   public Mono<ServerResponse> getTodos(ServerRequest request) {
@@ -39,16 +38,17 @@ public class TodoHandler {
       return ServerResponse.notFound().build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-    return request
-        .bodyToMono(TodoDTO.class)
-        .map(
-            todoDTO -> {
-              todoDTO.setUserId(userId);
-              return todoDTO;
-            })
-        .flatMap(service::createTodo)
-        .map(TodoDTO::new)
-        .flatMap(todoDTO -> ServerResponse.status(HttpStatus.CREATED).body(todoDTO, TodoDTO.class));
+    Mono<TodoDTO> todoDTO =
+        request
+            .bodyToMono(TodoDTO.class)
+            .map(
+                todoDTO1 -> {
+                  todoDTO1.setUserId(userId);
+                  return todoDTO1;
+                })
+            .flatMap(service::createTodo)
+            .map(TodoDTO::new);
+    return ServerResponse.status(HttpStatus.CREATED).body(todoDTO, TodoDTO.class);
   }
 
   public Mono<ServerResponse> updateTodo(ServerRequest request) {
@@ -56,11 +56,9 @@ public class TodoHandler {
     if (token.isEmpty()) {
       return ServerResponse.notFound().build();
     }
-    return request
-        .bodyToMono(TodoDTO.class)
-        .flatMap(service::updateTodo)
-        .map(TodoDTO::new)
-        .flatMap(todoDTO -> ServerResponse.ok().body(todoDTO, TodoDTO.class));
+    Mono<TodoDTO> todoDTO =
+        request.bodyToMono(TodoDTO.class).flatMap(service::updateTodo).map(TodoDTO::new);
+    return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
 
   public Mono<ServerResponse> deleteTodo(ServerRequest request) {
@@ -68,8 +66,7 @@ public class TodoHandler {
     if (token.isEmpty()) {
       return ServerResponse.notFound().build();
     }
-    return Mono.just(Integer.valueOf(request.pathVariable("id")))
-        .flatMap(service::deleteTodo)
-        .then(ServerResponse.noContent().build());
+    Integer id = Integer.valueOf(request.pathVariable("id"));
+    return service.deleteTodo(id).then(ServerResponse.noContent().build());
   }
 }
