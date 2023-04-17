@@ -1,7 +1,8 @@
 package io.zcy.todo.todo;
 
+import static io.zcy.todo.Util.getTokenFrom;
+
 import com.auth0.jwt.JWT;
-import io.zcy.todo.Util;
 import jakarta.annotation.Resource;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
@@ -22,20 +23,18 @@ public class TodoHandler {
         .flatMap(todoDTO -> ServerResponse.ok().body(todoDTO, TodoDTO.class));
   }
 
-  public Flux<ServerResponse> getTodos(ServerRequest request) {
-    Optional<String> token = Util.getTokenFrom(request);
+  public Mono<ServerResponse> getTodos(ServerRequest request) {
+    Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return Flux.from(ServerResponse.notFound().build());
+      return ServerResponse.notFound().build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-    return service
-        .getTodosByUser(userId)
-        .map(TodoDTO::new)
-        .flatMap(todoDTO -> ServerResponse.ok().body(todoDTO, TodoDTO.class));
+    Flux<TodoDTO> todoDTO = service.getTodosByUser(userId).map(TodoDTO::new);
+    return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
 
   public Mono<ServerResponse> createTodo(ServerRequest request) {
-    Optional<String> token = Util.getTokenFrom(request);
+    Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.notFound().build();
     }
@@ -53,7 +52,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> updateTodo(ServerRequest request) {
-    Optional<String> token = Util.getTokenFrom(request);
+    Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.notFound().build();
     }
@@ -65,7 +64,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> deleteTodo(ServerRequest request) {
-    Optional<String> token = Util.getTokenFrom(request);
+    Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.notFound().build();
     }
