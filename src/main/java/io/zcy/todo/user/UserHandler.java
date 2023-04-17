@@ -25,12 +25,12 @@ public class UserHandler {
                     .flatMap(
                         user -> {
                           if (user == null) {
-                            return Mono.empty();
+                            return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
                           }
                           boolean checkpw =
                               BCrypt.checkpw(userDTO.getPassword(), user.getPasswordHash());
                           if (!checkpw) {
-                            return Mono.empty();
+                            return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
                           }
                           String token =
                               JWT.create()
@@ -44,31 +44,25 @@ public class UserHandler {
   }
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
-    return Mono.just(Integer.valueOf(request.pathVariable("id")))
-        .flatMap(service::getUserById)
-        .map(UserDTO::new)
-        .flatMap(userDTO -> ServerResponse.ok().body(userDTO, UserDTO.class));
+    Integer id = Integer.valueOf(request.pathVariable("id"));
+    Mono<UserDTO> userDTO = service.getUserById(id).map(UserDTO::new);
+    return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
 
   public Mono<ServerResponse> createUser(ServerRequest request) {
-    return request
-        .bodyToMono(UserDTO.class)
-        .flatMap(service::createUser)
-        .map(UserDTO::new)
-        .flatMap(userDTO -> ServerResponse.status(HttpStatus.CREATED).body(userDTO, UserDTO.class));
+    Mono<UserDTO> userDTO =
+        request.bodyToMono(UserDTO.class).flatMap(service::createUser).map(UserDTO::new);
+    return ServerResponse.status(HttpStatus.CREATED).body(userDTO, UserDTO.class);
   }
 
   public Mono<ServerResponse> updateUser(ServerRequest request) {
-    return request
-        .bodyToMono(UserDTO.class)
-        .flatMap(service::updateUser)
-        .map(UserDTO::new)
-        .flatMap(userDTO -> ServerResponse.ok().body(userDTO, UserDTO.class));
+    Mono<UserDTO> userDTO =
+        request.bodyToMono(UserDTO.class).flatMap(service::updateUser).map(UserDTO::new);
+    return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
 
   public Mono<ServerResponse> deleteUser(ServerRequest request) {
-    return Mono.just(Integer.valueOf(request.pathVariable("id")))
-        .flatMap(service::deleteUser)
-        .then(ServerResponse.noContent().build());
+    Integer id = Integer.valueOf(request.pathVariable("id"));
+    return service.deleteUser(id).then(ServerResponse.noContent().build());
   }
 }
