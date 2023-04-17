@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class TodoService {
   @Resource private TodoRepository repository;
 
-    public Mono<Todo> getTodoById(Integer id) {
+  public Mono<Todo> getTodoById(Integer id) {
     return repository.findById(id);
   }
 
