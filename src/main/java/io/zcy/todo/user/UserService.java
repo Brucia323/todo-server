@@ -1,7 +1,6 @@
 package io.zcy.todo.user;
 
 import jakarta.annotation.Resource;
-import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
