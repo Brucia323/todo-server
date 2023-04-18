@@ -1,4 +1,4 @@
-package io.zcy.todo.todo;
+package io.zcy.todo.todo.record;
 
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
