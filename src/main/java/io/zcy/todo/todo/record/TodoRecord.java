@@ -1,9 +1,7 @@
 package io.zcy.todo.todo.record;
 
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("todo_record")
@@ -12,8 +10,8 @@ public class TodoRecord {
   private Integer userId;
   private Integer todoId;
   private Integer currentAmount;
-  @CreatedDate private LocalDateTime createTime;
-  @LastModifiedDate private LocalDateTime updateTime;
+  private LocalDateTime createTime=LocalDateTime.now();
+  private LocalDateTime updateTime=LocalDateTime.now();
 
   public TodoRecord() {}
 
