@@ -19,7 +19,6 @@ dependencies {
     implementation("org.springframework.security:spring-security-crypto:6.0.2")
     implementation("com.auth0:java-jwt:4.4.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
