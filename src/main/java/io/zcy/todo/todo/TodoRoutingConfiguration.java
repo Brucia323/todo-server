@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration(proxyBeanMethods = false)
 public class TodoRoutingConfiguration {
   @Bean
-  public RouterFunction<ServerResponse> monoRouterFunction(TodoHandler todoHandler) {
+  public RouterFunction<ServerResponse> TodoRouterFunction(TodoHandler todoHandler) {
     return route()
         .GET("/todo", ACCEPT_JSON, todoHandler::getTodos)
         .GET("/todo/{id}", ACCEPT_JSON, todoHandler::getTodoById)
