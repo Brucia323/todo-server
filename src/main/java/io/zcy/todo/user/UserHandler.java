@@ -2,8 +2,9 @@ package io.zcy.todo.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.annotation.Resource;
-import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
@@ -36,15 +37,17 @@ public class UserHandler {
                               JWT.create()
                                   .withClaim("id", user.getId())
                                   .sign(Algorithm.HMAC256("todo"));
-                          Map<String, String> response =
-                              Map.of("name", user.getName(), "token", token);
-                          return ServerResponse.status(HttpStatus.CREATED)
-                              .body(response, Map.class);
+                          ObjectMapper mapper = new ObjectMapper();
+                          ObjectNode node = mapper.createObjectNode();
+                          node.put("name", user.getName());
+                          node.put("token", token);
+                          return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
                         }));
   }
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
     Integer id = Integer.valueOf(request.pathVariable("id"));
+    System.out.println(id);
     Mono<UserDTO> userDTO = service.getUserById(id).map(UserDTO::new);
     return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
