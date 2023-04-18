@@ -2,9 +2,7 @@ package io.zcy.todo.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("users")
@@ -14,8 +12,10 @@ public class User {
   private String email;
   @JsonIgnore private String passwordHash;
   private String timePerWeek;
-  @CreatedDate private LocalDateTime createTime;
-  @LastModifiedDate private LocalDateTime updateTime;
+
+  private LocalDateTime createTime = LocalDateTime.now();
+
+  private LocalDateTime updateTime = LocalDateTime.now();
 
   public User() {}
 
