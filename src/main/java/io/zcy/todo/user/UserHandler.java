@@ -40,6 +40,7 @@ public class UserHandler {
                           ObjectMapper mapper = new ObjectMapper();
                           ObjectNode node = mapper.createObjectNode();
                           node.put("name", user.getName());
+                          node.put("email", user.getEmail());
                           node.put("token", token);
                           return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
                         }));
