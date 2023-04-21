@@ -1,5 +1,6 @@
 package io.zcy.todo.todo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -9,9 +10,9 @@ public class Todo {
   @Id private Integer id;
   private Integer userId;
   private String name;
-  private LocalDateTime beginTime;
-  private LocalDateTime plannedEndTime;
-  private LocalDateTime actualEndTime;
+  private LocalDate beginTime;
+  private LocalDate plannedEndTime;
+  private LocalDate actualEndTime;
   private Integer currentAmount;
   private Integer totalAmount;
   private String description;
@@ -23,8 +24,8 @@ public class Todo {
   public Todo(
       Integer userId,
       String name,
-      LocalDateTime beginTime,
-      LocalDateTime plannedEndTime,
+      LocalDate beginTime,
+      LocalDate plannedEndTime,
       Integer totalAmount,
       String description) {
     this.userId = userId;
@@ -39,9 +40,9 @@ public class Todo {
       Integer id,
       Integer userId,
       String name,
-      LocalDateTime beginTime,
-      LocalDateTime plannedEndTime,
-      LocalDateTime actualEndTime,
+      LocalDate beginTime,
+      LocalDate plannedEndTime,
+      LocalDate actualEndTime,
       Integer currentAmount,
       Integer totalAmount,
       String description,
@@ -84,27 +85,27 @@ public class Todo {
     this.name = name;
   }
 
-  public LocalDateTime getBeginTime() {
+  public LocalDate getBeginTime() {
     return beginTime;
   }
 
-  public void setBeginTime(LocalDateTime beginTime) {
+  public void setBeginTime(LocalDate beginTime) {
     this.beginTime = beginTime;
   }
 
-  public LocalDateTime getPlannedEndTime() {
+  public LocalDate getPlannedEndTime() {
     return plannedEndTime;
   }
 
-  public void setPlannedEndTime(LocalDateTime plannedEndTime) {
+  public void setPlannedEndTime(LocalDate plannedEndTime) {
     this.plannedEndTime = plannedEndTime;
   }
 
-  public LocalDateTime getActualEndTime() {
+  public LocalDate getActualEndTime() {
     return actualEndTime;
   }
 
-  public void setActualEndTime(LocalDateTime actualEndTime) {
+  public void setActualEndTime(LocalDate actualEndTime) {
     this.actualEndTime = actualEndTime;
   }
 
