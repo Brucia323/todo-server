@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.todos
     planned_end_time timestamp without time zone,
     actual_end_time timestamp without time zone,
     current_amount integer,
-    total_amount integer,
+    total_amount integer NOT NULL,
     description text COLLATE pg_catalog."default",
     create_time timestamp without time zone NOT NULL,
     update_time timestamp without time zone NOT NULL,
