@@ -48,7 +48,6 @@ public class UserHandler {
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
     Integer id = Integer.valueOf(request.pathVariable("id"));
-    System.out.println(id);
     Mono<UserDTO> userDTO = service.getUserById(id).map(UserDTO::new);
     return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
