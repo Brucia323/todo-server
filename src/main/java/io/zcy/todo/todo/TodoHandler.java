@@ -25,7 +25,7 @@ public class TodoHandler {
   public Mono<ServerResponse> getTodos(ServerRequest request) {
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return ServerResponse.notFound().build();
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Flux<TodoDTO> todoDTO = service.getTodosByUser(userId).map(TodoDTO::new);
@@ -35,7 +35,7 @@ public class TodoHandler {
   public Mono<ServerResponse> createTodo(ServerRequest request) {
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return ServerResponse.notFound().build();
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Mono<TodoDTO> todoDTO =
@@ -54,7 +54,7 @@ public class TodoHandler {
   public Mono<ServerResponse> updateTodo(ServerRequest request) {
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return ServerResponse.notFound().build();
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Mono<TodoDTO> todoDTO =
         request.bodyToMono(TodoDTO.class).flatMap(service::updateTodo).map(TodoDTO::new);
@@ -64,7 +64,7 @@ public class TodoHandler {
   public Mono<ServerResponse> deleteTodo(ServerRequest request) {
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return ServerResponse.notFound().build();
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer id = Integer.valueOf(request.pathVariable("id"));
     return service.deleteTodo(id).then(ServerResponse.noContent().build());
