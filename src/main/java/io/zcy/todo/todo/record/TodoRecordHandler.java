@@ -18,7 +18,7 @@ public class TodoRecordHandler {
   public Mono<ServerResponse> createTodoRecord(ServerRequest request) {
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
-      return ServerResponse.notFound().build();
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Integer todoId = Integer.valueOf(request.pathVariable("id"));
