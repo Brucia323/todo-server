@@ -16,7 +16,7 @@ public class TodoService {
   }
 
   public Flux<Todo> getTodosByUser(Integer userId) {
-    return repository.findByUserId(userId);
+    return repository.findByUserIdOrderByIdDesc(userId);
   }
 
   public Mono<Todo> createTodo(TodoDTO todoDTO) {
