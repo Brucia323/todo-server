@@ -11,7 +11,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration(proxyBeanMethods = false)
 public class TodoRecordRoutingConfiguration {
   @Bean
-  public RouterFunction<ServerResponse> TodoRecordRouterFunction(TodoRecordHandler todoRecordHandler) {
+  public RouterFunction<ServerResponse> TodoRecordRouterFunction(
+      TodoRecordHandler todoRecordHandler) {
     return route().POST("/todo/{id}", ACCEPT_JSON, todoRecordHandler::createTodoRecord).build();
   }
 }
