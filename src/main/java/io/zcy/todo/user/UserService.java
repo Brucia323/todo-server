@@ -1,6 +1,7 @@
 package io.zcy.todo.user;
 
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -8,6 +9,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 @Service
+@Slf4j
 public class UserService {
   @Resource private UserRepository repository;
 
@@ -26,10 +28,12 @@ public class UserService {
         .flatMap(
             user -> {
               if (user.getId() != null) {
+                log.info("【{}】已注册", user.getEmail());
                 return Mono.error(new RuntimeException(user.toString()));
               }
               String passwordHash = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
               user = new User(userDTO.getName(), userDTO.getEmail(), passwordHash);
+              log.info("正在注册: {}", user);
               return repository.save(user);
             });
   }
@@ -39,6 +43,7 @@ public class UserService {
         .findById(userDTO.getId())
         .map(
             user -> {
+              log.info("【{}】正在更新信息", user.getId());
               String password = userDTO.getPassword();
 
               user.setName(userDTO.getName());
