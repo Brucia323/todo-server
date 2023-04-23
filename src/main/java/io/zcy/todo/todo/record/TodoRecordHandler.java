@@ -24,7 +24,7 @@ public class TodoRecordHandler {
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Integer todoId = Integer.valueOf(request.pathVariable("id"));
-    log.info("用户 id: {} 更新任务: {} 进度", userId, todoId);
+    log.info("用户【{}】正在更新任务【{}】进度", userId, todoId);
     Mono<TodoRecordDTO> todoRecordDTO =
         request
             .bodyToMono(TodoRecordDTO.class)
