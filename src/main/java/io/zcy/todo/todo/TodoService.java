@@ -1,13 +1,16 @@
 package io.zcy.todo.todo;
 
 import jakarta.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-
 @Service
+@Slf4j
 public class TodoService {
   @Resource private TodoRepository repository;
 
@@ -28,6 +31,7 @@ public class TodoService {
             todoDTO.getPlannedEndTime(),
             todoDTO.getTotalAmount(),
             todoDTO.getDescription());
+    log.info("任务正在创建: {}", todo);
     return repository.save(todo);
   }
 
@@ -38,11 +42,14 @@ public class TodoService {
             todo -> {
               todo.setBeginTime(todoDTO.getBeginTime());
               todo.setPlannedEndTime(todoDTO.getPlannedEndTime());
-              todo.setActualEndTime(todoDTO.getActualEndTime());
               todo.setCurrentAmount(todoDTO.getCurrentAmount());
               todo.setTotalAmount(todoDTO.getTotalAmount());
               todo.setDescription(todoDTO.getDescription());
+              if (Objects.equals(todo.getCurrentAmount(), todo.getTotalAmount())) {
+                todo.setActualEndTime(LocalDate.now());
+              }
               todo.setUpdateTime(LocalDateTime.now());
+              log.info("任务正在被更新: {}", todo);
               return todo;
             })
         .flatMap(repository::save);
