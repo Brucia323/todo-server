@@ -23,13 +23,13 @@ public class UserHandler {
         .bodyToMono(UserDTO.class)
         .flatMap(
             userDTO -> {
-              log.info("登录请求 email: {}", userDTO.getEmail());
+              log.info("【{}】请求登录", userDTO.getEmail());
               return service
                   .getUserByEmail(userDTO)
                   .flatMap(
                       user -> {
                         if (user == null) {
-                          log.info("未注册登录 email: {}", userDTO.getEmail());
+                          log.info("【{}】未注册", userDTO.getEmail());
                           return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
                         }
                         boolean checkpw =
@@ -46,7 +46,7 @@ public class UserHandler {
                         node.put("name", user.getName());
                         node.put("email", user.getEmail());
                         node.put("token", token);
-                        log.info("当前登录 id: {}", user.getId());
+                        log.info("【{}】正在登录", user.getId());
                         return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
                       });
             });
