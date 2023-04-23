@@ -1,10 +1,16 @@
 package io.zcy.todo.todo.record;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("todo_record")
+@Getter
+@Setter
+@ToString
 public class TodoRecord {
   @Id private Integer id;
   private Integer userId;
@@ -34,71 +40,5 @@ public class TodoRecord {
     this.currentAmount = currentAmount;
     this.createTime = createTime;
     this.updateTime = updateTime;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
-
-  public Integer getTodoId() {
-    return todoId;
-  }
-
-  public void setTodoId(Integer todoId) {
-    this.todoId = todoId;
-  }
-
-  public Integer getCurrentAmount() {
-    return currentAmount;
-  }
-
-  public void setCurrentAmount(Integer currentAmount) {
-    this.currentAmount = currentAmount;
-  }
-
-  public LocalDateTime getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(LocalDateTime createTime) {
-    this.createTime = createTime;
-  }
-
-  public LocalDateTime getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(LocalDateTime updateTime) {
-    this.updateTime = updateTime;
-  }
-
-  @Override
-  public String toString() {
-    return "TodoRecord{"
-        + "id="
-        + id
-        + ", userId="
-        + userId
-        + ", todoId="
-        + todoId
-        + ", currentAmount="
-        + currentAmount
-        + ", createTime="
-        + createTime
-        + ", updateTime="
-        + updateTime
-        + '}';
   }
 }
