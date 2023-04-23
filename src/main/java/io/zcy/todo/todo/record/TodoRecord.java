@@ -10,8 +10,8 @@ public class TodoRecord {
   private Integer userId;
   private Integer todoId;
   private Integer currentAmount;
-  private LocalDateTime createTime=LocalDateTime.now();
-  private LocalDateTime updateTime=LocalDateTime.now();
+  private LocalDateTime createTime = LocalDateTime.now();
+  private LocalDateTime updateTime = LocalDateTime.now();
 
   public TodoRecord() {}
 
