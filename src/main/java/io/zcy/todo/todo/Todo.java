@@ -2,10 +2,16 @@ package io.zcy.todo.todo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("todos")
+@Getter
+@Setter
+@ToString
 public class Todo {
   @Id private Integer id;
   private Integer userId;
@@ -13,7 +19,7 @@ public class Todo {
   private LocalDate beginTime;
   private LocalDate plannedEndTime;
   private LocalDate actualEndTime;
-  private Integer currentAmount;
+  private Integer currentAmount = 0;
   private Integer totalAmount;
   private String description;
   private LocalDateTime createTime = LocalDateTime.now();
@@ -59,123 +65,5 @@ public class Todo {
     this.description = description;
     this.createTime = createTime;
     this.updateTime = updateTime;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public LocalDate getBeginTime() {
-    return beginTime;
-  }
-
-  public void setBeginTime(LocalDate beginTime) {
-    this.beginTime = beginTime;
-  }
-
-  public LocalDate getPlannedEndTime() {
-    return plannedEndTime;
-  }
-
-  public void setPlannedEndTime(LocalDate plannedEndTime) {
-    this.plannedEndTime = plannedEndTime;
-  }
-
-  public LocalDate getActualEndTime() {
-    return actualEndTime;
-  }
-
-  public void setActualEndTime(LocalDate actualEndTime) {
-    this.actualEndTime = actualEndTime;
-  }
-
-  public Integer getCurrentAmount() {
-    return currentAmount;
-  }
-
-  public void setCurrentAmount(Integer currentAmount) {
-    this.currentAmount = currentAmount;
-  }
-
-  public Integer getTotalAmount() {
-    return totalAmount;
-  }
-
-  public void setTotalAmount(Integer totalAmount) {
-    this.totalAmount = totalAmount;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public LocalDateTime getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(LocalDateTime createTime) {
-    this.createTime = createTime;
-  }
-
-  public LocalDateTime getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(LocalDateTime updateTime) {
-    this.updateTime = updateTime;
-  }
-
-  @Override
-  public String toString() {
-    return "Todo{"
-        + "id="
-        + id
-        + ", userId="
-        + userId
-        + ", name='"
-        + name
-        + '\''
-        + ", beginTime="
-        + beginTime
-        + ", plannedEndTime="
-        + plannedEndTime
-        + ", actualEndTime="
-        + actualEndTime
-        + ", currentAmount="
-        + currentAmount
-        + ", totalAmount="
-        + totalAmount
-        + ", description='"
-        + description
-        + '\''
-        + ", createTime="
-        + createTime
-        + ", updateTime="
-        + updateTime
-        + '}';
   }
 }
