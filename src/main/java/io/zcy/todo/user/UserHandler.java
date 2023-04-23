@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class UserHandler {
   @Resource private UserService service;
 
@@ -20,30 +22,34 @@ public class UserHandler {
     return request
         .bodyToMono(UserDTO.class)
         .flatMap(
-            userDTO ->
-                service
-                    .getUserByEmail(userDTO)
-                    .flatMap(
-                        user -> {
-                          if (user == null) {
-                            return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
-                          }
-                          boolean checkpw =
-                              BCrypt.checkpw(userDTO.getPassword(), user.getPasswordHash());
-                          if (!checkpw) {
-                            return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
-                          }
-                          String token =
-                              JWT.create()
-                                  .withClaim("id", user.getId())
-                                  .sign(Algorithm.HMAC256("todo"));
-                          ObjectMapper mapper = new ObjectMapper();
-                          ObjectNode node = mapper.createObjectNode();
-                          node.put("name", user.getName());
-                          node.put("email", user.getEmail());
-                          node.put("token", token);
-                          return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
-                        }));
+            userDTO -> {
+              log.info("登录请求 email: {}", userDTO.getEmail());
+              return service
+                  .getUserByEmail(userDTO)
+                  .flatMap(
+                      user -> {
+                        if (user == null) {
+                          log.info("未注册登录 email: {}", userDTO.getEmail());
+                          return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
+                        }
+                        boolean checkpw =
+                            BCrypt.checkpw(userDTO.getPassword(), user.getPasswordHash());
+                        if (!checkpw) {
+                          return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
+                        }
+                        String token =
+                            JWT.create()
+                                .withClaim("id", user.getId())
+                                .sign(Algorithm.HMAC256("todo"));
+                        ObjectMapper mapper = new ObjectMapper();
+                        ObjectNode node = mapper.createObjectNode();
+                        node.put("name", user.getName());
+                        node.put("email", user.getEmail());
+                        node.put("token", token);
+                        log.info("当前登录 id: {}", user.getId());
+                        return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
+                      });
+            });
   }
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
