@@ -35,7 +35,8 @@ public class TodoRecordService {
             todoDTO -> {
               todoDTO.setCurrentAmount(todoRecord.getCurrentAmount());
               return parentService.updateTodo(todoDTO);
-            }).subscribe(todo -> log.info("当前任务信息: {}", todo));
+            })
+        .subscribe(todo -> log.info("当前任务信息: {}", todo));
     return repository.save(todoRecord);
   }
 }
