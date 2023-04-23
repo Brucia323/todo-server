@@ -5,6 +5,7 @@ import static io.zcy.todo.Util.getTokenFrom;
 import com.auth0.jwt.JWT;
 import jakarta.annotation.Resource;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -13,11 +14,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class TodoHandler {
   @Resource private TodoService service;
 
   public Mono<ServerResponse> getTodoById(ServerRequest request) {
     Integer id = Integer.valueOf(request.pathVariable("id"));
+    log.info("任务【{}】被读取", id);
     Mono<TodoDTO> todoDTO = service.getTodoById(id).map(TodoDTO::new);
     return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
@@ -28,6 +31,7 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
+    log.info("用户【{}】正在获取任务列表", userId);
     Flux<TodoDTO> todoDTO = service.getTodosByUser(userId).map(TodoDTO::new);
     return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
@@ -38,6 +42,7 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
+    log.info("用户【{}】正在创建任务", userId);
     Mono<TodoDTO> todoDTO =
         request
             .bodyToMono(TodoDTO.class)
@@ -67,6 +72,7 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer id = Integer.valueOf(request.pathVariable("id"));
+    log.info("任务【{}】正在被删除", id);
     return service.deleteTodo(id).then(ServerResponse.noContent().build());
   }
 }
