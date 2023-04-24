@@ -3,7 +3,6 @@ package io.zcy.todo.todo;
 import jakarta.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -45,7 +44,7 @@ public class TodoService {
               todo.setCurrentAmount(todoDTO.getCurrentAmount());
               todo.setTotalAmount(todoDTO.getTotalAmount());
               todo.setDescription(todoDTO.getDescription());
-              if (Objects.equals(todo.getCurrentAmount(), todo.getTotalAmount())) {
+              if (todo.getCurrentAmount() >= todo.getTotalAmount()) {
                 todo.setActualEndTime(LocalDate.now());
               }
               todo.setUpdateTime(LocalDateTime.now());
