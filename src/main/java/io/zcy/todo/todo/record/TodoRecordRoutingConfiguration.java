@@ -13,6 +13,9 @@ public class TodoRecordRoutingConfiguration {
   @Bean
   public RouterFunction<ServerResponse> TodoRecordRouterFunction(
       TodoRecordHandler todoRecordHandler) {
-    return route().POST("/todo/{id}", ACCEPT_JSON, todoRecordHandler::createTodoRecord).build();
+    return route()
+        .POST("/todo/{id}", ACCEPT_JSON, todoRecordHandler::createTodoRecord)
+        .GET("/efficiency", ACCEPT_JSON, todoRecordHandler::generateEfficiency)
+        .build();
   }
 }
