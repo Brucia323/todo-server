@@ -34,6 +34,9 @@ dependencies {
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.slf4j:slf4j-api")
     implementation("com.auth0:java-jwt:4.3.0")
+    implementation("org.deeplearning4j:deeplearning4j-core:1.0.0-M2.1")
+    implementation("org.nd4j:nd4j-native-platform:1.0.0-M2.1")
+    implementation("org.datavec:datavec-api:1.0.0-M2.1")
 }
 
 tasks.withType<Test> {
