@@ -1,5 +1,6 @@
 package io.zcy.todo.todo.record;
 
+import io.zcy.todo.todo.Todo;
 import io.zcy.todo.todo.TodoDTO;
 import io.zcy.todo.todo.TodoService;
 import jakarta.annotation.Resource;
@@ -26,17 +27,17 @@ public class TodoRecordService {
 
   public Mono<TodoRecord> createTodoRecord(
       TodoRecordDTO todoRecordDTO, Integer userId, Integer todoId) {
-    TodoRecord todoRecord = new TodoRecord(userId, todoId, todoRecordDTO.getCurrentAmount());
-    parentService
-        .getTodoById(todoId)
-        .publishOn(Schedulers.boundedElastic())
+    Mono<Todo> todo = parentService.getTodoById(todoId);
+    Mono<TodoRecord> todoRecord =
+        todo.map(todo1 -> todoRecordDTO.getCurrentAmount() - todo1.getCurrentAmount())
+            .map(amount -> new TodoRecord(userId, todoId, amount));
+    todo.publishOn(Schedulers.boundedElastic())
         .map(TodoDTO::new)
         .flatMap(
             todoDTO -> {
-              todoDTO.setCurrentAmount(todoRecord.getCurrentAmount());
+              todoDTO.setCurrentAmount(todoRecordDTO.getCurrentAmount());
               return parentService.updateTodo(todoDTO);
-            })
-        .subscribe(todo -> log.info("当前任务信息: {}", todo));
-    return repository.save(todoRecord);
+            }).subscribe();
+    return todoRecord.flatMap(repository::save);
   }
 }
