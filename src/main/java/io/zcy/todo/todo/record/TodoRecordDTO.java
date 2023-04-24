@@ -1,10 +1,9 @@
 package io.zcy.todo.todo.record;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,7 +26,7 @@ public class TodoRecordDTO {
 
   public TodoRecordDTO(TodoRecord todoRecord) {
     this.id = todoRecord.getId();
-    this.currentAmount = todoRecord.getCurrentAmount();
+    this.currentAmount = todoRecord.getAmount();
     this.createTime = todoRecord.getCreateTime();
     this.updateTime = todoRecord.getUpdateTime();
   }
