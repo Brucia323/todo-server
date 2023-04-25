@@ -16,9 +16,9 @@ public class Todo {
   @Id private Integer id;
   private Integer userId;
   private String name;
-  private LocalDate beginTime;
-  private LocalDate plannedEndTime;
-  private LocalDate actualEndTime;
+  private LocalDate beginDate;
+  private LocalDate plannedEndDate;
+  private LocalDate actualEndDate;
   private Integer currentAmount = 0;
   private Integer totalAmount;
   private String description;
@@ -30,14 +30,14 @@ public class Todo {
   public Todo(
       Integer userId,
       String name,
-      LocalDate beginTime,
-      LocalDate plannedEndTime,
+      LocalDate beginDate,
+      LocalDate plannedEndDate,
       Integer totalAmount,
       String description) {
     this.userId = userId;
     this.name = name;
-    this.beginTime = beginTime;
-    this.plannedEndTime = plannedEndTime;
+    this.beginDate = beginDate;
+    this.plannedEndDate = plannedEndDate;
     this.totalAmount = totalAmount;
     this.description = description;
   }
@@ -46,9 +46,9 @@ public class Todo {
       Integer id,
       Integer userId,
       String name,
-      LocalDate beginTime,
-      LocalDate plannedEndTime,
-      LocalDate actualEndTime,
+      LocalDate beginDate,
+      LocalDate plannedEndDate,
+      LocalDate actualEndDate,
       Integer currentAmount,
       Integer totalAmount,
       String description,
@@ -57,9 +57,9 @@ public class Todo {
     this.id = id;
     this.userId = userId;
     this.name = name;
-    this.beginTime = beginTime;
-    this.plannedEndTime = plannedEndTime;
-    this.actualEndTime = actualEndTime;
+    this.beginDate = beginDate;
+    this.plannedEndDate = plannedEndDate;
+    this.actualEndDate = actualEndDate;
     this.currentAmount = currentAmount;
     this.totalAmount = totalAmount;
     this.description = description;
