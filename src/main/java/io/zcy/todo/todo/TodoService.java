@@ -26,8 +26,8 @@ public class TodoService {
         new Todo(
             todoDTO.getUserId(),
             todoDTO.getName(),
-            todoDTO.getBeginTime(),
-            todoDTO.getPlannedEndTime(),
+            todoDTO.getBeginDate(),
+            todoDTO.getPlannedEndDate(),
             todoDTO.getTotalAmount(),
             todoDTO.getDescription());
     log.info("任务正在创建: {}", todo);
@@ -39,13 +39,13 @@ public class TodoService {
         .findById(todoDTO.getId())
         .map(
             todo -> {
-              todo.setBeginTime(todoDTO.getBeginTime());
-              todo.setPlannedEndTime(todoDTO.getPlannedEndTime());
+              todo.setBeginDate(todoDTO.getBeginDate());
+              todo.setPlannedEndDate(todoDTO.getPlannedEndDate());
               todo.setCurrentAmount(todoDTO.getCurrentAmount());
               todo.setTotalAmount(todoDTO.getTotalAmount());
               todo.setDescription(todoDTO.getDescription());
               if (todo.getCurrentAmount() >= todo.getTotalAmount()) {
-                todo.setActualEndTime(LocalDate.now());
+                todo.setActualEndDate(LocalDate.now());
               }
               todo.setUpdateTime(LocalDateTime.now());
               log.info("任务正在被更新: {}", todo);
