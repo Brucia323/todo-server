@@ -13,6 +13,10 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
+import static io.zcy.todo.Util.getTokenFrom;
+
 @Component
 @Slf4j
 public class UserHandler {
@@ -53,8 +57,12 @@ public class UserHandler {
   }
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
-    Integer id = Integer.valueOf(request.pathVariable("id"));
-    Mono<UserDTO> userDTO = service.getUserById(id).map(UserDTO::new);
+      Optional<String> token = getTokenFrom(request);
+      if (token.isEmpty()) {
+          return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
+      }
+      Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
+      Mono<UserDTO> userDTO = service.getUserById(userId).map(UserDTO::new);
     return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
 
