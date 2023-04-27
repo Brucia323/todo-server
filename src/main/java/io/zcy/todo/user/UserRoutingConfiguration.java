@@ -13,7 +13,7 @@ public class UserRoutingConfiguration {
   @Bean
   public RouterFunction<ServerResponse> monoRouterFunction(UserHandler userHandler) {
     return route()
-        .GET("/user/{id}", ACCEPT_JSON, userHandler::getUserById)
+        .GET("/user", ACCEPT_JSON, userHandler::getUserById)
         .POST("/user", ACCEPT_JSON, userHandler::createUser)
         .PUT("/user/{id}", ACCEPT_JSON, userHandler::updateUser)
         .DELETE("/user/{id}", ACCEPT_JSON, userHandler::deleteUser)
