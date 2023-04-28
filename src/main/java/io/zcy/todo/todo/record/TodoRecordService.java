@@ -37,7 +37,8 @@ public class TodoRecordService {
             todoDTO -> {
               todoDTO.setCurrentAmount(todoRecordDTO.getCurrentAmount());
               return parentService.updateTodo(todoDTO);
-            }).subscribe();
+            })
+        .subscribe();
     return todoRecord.flatMap(repository::save);
   }
 }
