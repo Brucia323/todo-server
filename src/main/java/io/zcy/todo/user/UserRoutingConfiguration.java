@@ -14,6 +14,8 @@ public class UserRoutingConfiguration {
   public RouterFunction<ServerResponse> monoRouterFunction(UserHandler userHandler) {
     return route()
         .GET("/user", ACCEPT_JSON, userHandler::getUserById)
+        .GET("/user/email/{email}", ACCEPT_JSON, userHandler::getUserByEmail)
+        .GET("/user/captcha", ACCEPT_JSON, userHandler::generateCaptcha)
         .POST("/user", ACCEPT_JSON, userHandler::createUser)
         .PUT("/user/{id}", ACCEPT_JSON, userHandler::updateUser)
         .DELETE("/user/{id}", ACCEPT_JSON, userHandler::deleteUser)
