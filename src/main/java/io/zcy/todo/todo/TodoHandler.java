@@ -19,6 +19,7 @@ public class TodoHandler {
   @Resource private TodoService service;
 
   public Mono<ServerResponse> getTodoById(ServerRequest request) {
+    log.info("{}", request);
     Integer id = Integer.valueOf(request.pathVariable("id"));
     log.info("任务【{}】被读取", id);
     Mono<TodoDTO> todoDTO = service.getTodoById(id).map(TodoDTO::new);
@@ -26,6 +27,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> getTodos(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
@@ -37,6 +39,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> createTodo(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
@@ -57,6 +60,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> updateTodo(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
@@ -67,6 +71,7 @@ public class TodoHandler {
   }
 
   public Mono<ServerResponse> deleteTodo(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
