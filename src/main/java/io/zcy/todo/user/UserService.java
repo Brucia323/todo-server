@@ -1,12 +1,11 @@
 package io.zcy.todo.user;
 
 import jakarta.annotation.Resource;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -17,8 +16,8 @@ public class UserService {
     return repository.findById(id);
   }
 
-  public Mono<User> getUserByEmail(UserDTO userDTO) {
-    return repository.findByEmail(userDTO.getEmail());
+  public Mono<User> getUserByEmail(String email) {
+    return repository.findByEmail(email);
   }
 
   public Mono<User> createUser(UserDTO userDTO) {
@@ -29,7 +28,7 @@ public class UserService {
             user -> {
               if (user.getId() != null) {
                 log.info("【{}】已注册", user.getEmail());
-                return Mono.error(new RuntimeException(user.toString()));
+                return Mono.error(new RuntimeException("该邮箱已注册"));
               }
               String passwordHash = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
               user = new User(userDTO.getName(), userDTO.getEmail(), passwordHash);
@@ -63,5 +62,12 @@ public class UserService {
 
   public Mono<Void> deleteUser(Integer id) {
     return repository.deleteById(id);
+  }
+
+  public Mono<String> generateCaptcha() {
+    double v = Math.random() * 9000 + 1000;
+    long round = Math.round(v);
+    log.info("验证码是【{}】", round);
+    return Mono.just(String.valueOf(round));
   }
 }
