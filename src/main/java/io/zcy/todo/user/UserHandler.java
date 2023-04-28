@@ -23,13 +23,14 @@ public class UserHandler {
   @Resource private UserService service;
 
   public Mono<ServerResponse> login(ServerRequest request) {
+    log.info("{}", request);
     return request
         .bodyToMono(UserDTO.class)
         .flatMap(
             userDTO -> {
               log.info("【{}】请求登录", userDTO.getEmail());
               return service
-                  .getUserByEmail(userDTO)
+                  .getUserByEmail(userDTO.getEmail())
                   .flatMap(
                       user -> {
                         if (user == null) {
@@ -57,29 +58,59 @@ public class UserHandler {
   }
 
   public Mono<ServerResponse> getUserById(ServerRequest request) {
-      Optional<String> token = getTokenFrom(request);
-      if (token.isEmpty()) {
-          return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
-      }
-      Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-      Mono<UserDTO> userDTO = service.getUserById(userId).map(UserDTO::new);
+    log.info("{}", request);
+    Optional<String> token = getTokenFrom(request);
+    if (token.isEmpty()) {
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
+    Mono<UserDTO> userDTO = service.getUserById(userId).map(UserDTO::new);
     return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
 
+  public Mono<ServerResponse> getUserByEmail(ServerRequest request) {
+    log.info("{}", request);
+    String email = request.pathVariable("email");
+    Mono<User> user =
+        service
+            .getUserByEmail(email)
+            .singleOptional()
+            .handle(
+                (optional, sink) -> {
+                  if (optional.isEmpty()) {
+                    sink.error(new RuntimeException("该邮箱未注册"));
+                    return;
+                  }
+                  sink.next(optional.get());
+                });
+    return ServerResponse.ok().body(user, User.class);
+  }
+
   public Mono<ServerResponse> createUser(ServerRequest request) {
+    log.info("{}", request);
     Mono<UserDTO> userDTO =
         request.bodyToMono(UserDTO.class).flatMap(service::createUser).map(UserDTO::new);
     return ServerResponse.status(HttpStatus.CREATED).body(userDTO, UserDTO.class);
   }
 
   public Mono<ServerResponse> updateUser(ServerRequest request) {
+    log.info("{}", request);
     Mono<UserDTO> userDTO =
         request.bodyToMono(UserDTO.class).flatMap(service::updateUser).map(UserDTO::new);
     return ServerResponse.ok().body(userDTO, UserDTO.class);
   }
 
   public Mono<ServerResponse> deleteUser(ServerRequest request) {
+    log.info("{}", request);
     Integer id = Integer.valueOf(request.pathVariable("id"));
     return service.deleteUser(id).then(ServerResponse.noContent().build());
+  }
+
+  public Mono<ServerResponse> generateCaptcha(ServerRequest request) {
+    log.info("{}", request);
+    ObjectMapper mapper = new ObjectMapper();
+    ObjectNode node = mapper.createObjectNode();
+    service.generateCaptcha().map(captcha -> node.put("captcha", captcha)).subscribe();
+    return ServerResponse.ok().bodyValue(node);
   }
 }
