@@ -22,6 +22,7 @@ public class TodoRecordHandler {
   @Resource private TodoRecordService service;
 
   public Mono<ServerResponse> createTodoRecord(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
@@ -38,6 +39,7 @@ public class TodoRecordHandler {
   }
 
   public Mono<ServerResponse> generateEfficiency(ServerRequest request) {
+    log.info("{}", request);
     Optional<String> token = getTokenFrom(request);
     if (token.isEmpty()) {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
