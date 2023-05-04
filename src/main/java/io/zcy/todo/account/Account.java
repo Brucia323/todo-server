@@ -1,4 +1,4 @@
-package io.zcy.todo.user;
+package io.zcy.todo.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("users")
 @Getter
 @Setter
 @ToString
-public class User {
+public class Account {
   @Id private Integer id;
   private String name;
   private String email;
@@ -23,15 +21,15 @@ public class User {
 
   private LocalDateTime updateTime = LocalDateTime.now();
 
-  public User() {}
+  public Account() {}
 
-  public User(String name, String email, String passwordHash) {
+  public Account(String name, String email, String passwordHash) {
     this.name = name;
     this.email = email;
     this.passwordHash = passwordHash;
   }
 
-  public User(
+  public Account(
       Integer id,
       String name,
       String email,
