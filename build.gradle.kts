@@ -36,6 +36,9 @@ dependencies {
     implementation("com.auth0:java-jwt:4.3.0")
     implementation("ai.djl.spring:djl-spring-boot-starter-mxnet-auto:0.20")
     implementation("ai.djl.spring:djl-spring-boot-starter-autoconfigure:0.20")
+    implementation("ai.djl.tablesaw:tablesaw:0.22.1")
+    implementation("tech.tablesaw:tablesaw-core:0.43.1")
+    implementation("tech.tablesaw:tablesaw-json:0.43.1")
 }
 
 tasks.withType<Test> {
