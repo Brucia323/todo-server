@@ -34,7 +34,8 @@ dependencies {
     implementation("org.springframework.security:spring-security-crypto")
     implementation("org.slf4j:slf4j-api")
     implementation("com.auth0:java-jwt:4.3.0")
-    implementation("org.tensorflow:tensorflow-core-platform:0.5.0")
+    implementation("ai.djl.spring:djl-spring-boot-starter-mxnet-auto:0.20")
+    implementation("ai.djl.spring:djl-spring-boot-starter-autoconfigure:0.20")
 }
 
 tasks.withType<Test> {
