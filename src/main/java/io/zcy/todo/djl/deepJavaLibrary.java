@@ -3,6 +3,8 @@ package io.zcy.todo.djl;
 import ai.djl.Model;
 import ai.djl.engine.Engine;
 import ai.djl.metric.Metrics;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Block;
 import ai.djl.nn.Blocks;
@@ -10,26 +12,25 @@ import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.BatchNorm;
 import ai.djl.nn.recurrent.LSTM;
-import ai.djl.tablesaw.TablesawDataset;
 import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.TrainingResult;
+import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.SaveModelTrainingListener;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.zcy.todo.todo.record.TodoRecord;
 import io.zcy.todo.todo.record.TodoRecordService;
 import jakarta.annotation.Resource;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.io.json.JsonReadOptions;
 
 @Component
 @Slf4j
@@ -52,35 +53,26 @@ public class DeepJavaLibrary {
     if (todoRecords == null) {
       throw new RuntimeException("暂无数据");
     }
-    ObjectMapper mapper = new ObjectMapper();
-    List<Map<String, Object>> nodes = new ArrayList<>();
-    todoRecords.forEach(
-        todoRecord -> {
-          Map<String, Object> node = new HashMap<>();
-          node.put("date", todoRecord.getCreateTime().toLocalDate().toString());
-          node.put("amount", todoRecord.getAmount());
-          nodes.add(node);
-        });
-    String json = mapper.writeValueAsString(nodes);
-    log.info("元数据: {}", json);
-    TablesawDataset dataset =
-        TablesawDataset.builder()
-            .setReadOptions(JsonReadOptions.builderFromString(json).build())
-            .addNumericFeature("amount")
-            .addNumericLabel("date")
-            .setSampling(2, false)
-            .build();
-    dataset.prepare(new ProgressBar());
-    log.info("数据集大小: {}", dataset.size());
-    try (Model model = Model.newInstance("lstm")) {
-      model.setBlock(getLSTMModel());
-      DefaultTrainingConfig config = setupTrainingConfig();
-      try (Trainer trainer = model.newTrainer(config)) {
-        trainer.setMetrics(new Metrics());
-        Shape shape = new Shape(32, 1, dataset.size(), 2);
-        trainer.initialize(shape);
-        EasyTrain.fit(trainer, 1, dataset, dataset);
-        return trainer.getTrainingResult();
+    List<LocalDate> dates =
+        todoRecords.stream().map(todoRecord -> todoRecord.getCreateTime().toLocalDate()).toList();
+    int[] amounts =
+        todoRecords.stream().map(TodoRecord::getAmount).mapToInt(Integer::valueOf).toArray();
+    try (NDManager manager = NDManager.newBaseManager()) {
+      NDArray labels = manager.arange(amounts.length);
+      NDArray data = manager.create(amounts);
+      ArrayDataset arrayDataset =
+          new ArrayDataset.Builder().optLabels(labels).setData(data).setSampling(2, false).build();
+      arrayDataset.prepare(new ProgressBar());
+      try (Model model = Model.newInstance("lstm")) {
+        model.setBlock(getLSTMModel());
+        DefaultTrainingConfig config = setupTrainingConfig();
+        try (Trainer trainer = model.newTrainer(config)) {
+          trainer.setMetrics(new Metrics());
+          Shape shape = new Shape(1, 1, arrayDataset.size(), 1);
+          trainer.initialize(shape);
+          EasyTrain.fit(trainer, 1, arrayDataset, null);
+          return trainer.getTrainingResult();
+        }
       }
     }
   }
