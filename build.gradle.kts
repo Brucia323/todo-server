@@ -16,6 +16,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
@@ -39,6 +40,7 @@ dependencies {
     implementation("ai.djl.tablesaw:tablesaw:0.22.1")
     implementation("tech.tablesaw:tablesaw-core:0.43.1")
     implementation("tech.tablesaw:tablesaw-json:0.43.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0")
 }
 
 tasks.withType<Test> {
