@@ -15,6 +15,7 @@ public class TodoRoutingConfiguration {
     return route()
         .GET("/todo", ACCEPT_JSON, todoHandler::getTodos)
         .GET("/todo/{id}", ACCEPT_JSON, todoHandler::getTodoById)
+        .GET("/program", ACCEPT_JSON, todoHandler::getProgram)
         .POST("/todo", ACCEPT_JSON, todoHandler::createTodo)
         .PUT("/todo/{id}", ACCEPT_JSON, todoHandler::updateTodo)
         .DELETE("/todo/{id}", ACCEPT_JSON, todoHandler::deleteTodo)
