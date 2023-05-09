@@ -28,13 +28,11 @@ public class AccountHandler {
         .bodyToMono(AccountDTO.class)
         .flatMap(
                 accountDTO -> {
-              log.info("【{}】请求登录", accountDTO.getEmail());
               return service
                   .getUserByEmail(accountDTO.getEmail())
                   .flatMap(
                           account -> {
                         if (account == null) {
-                          log.info("【{}】未注册", accountDTO.getEmail());
                           return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
                         }
                         boolean checkpw =
@@ -51,7 +49,6 @@ public class AccountHandler {
                         node.put("name", account.getName());
                         node.put("email", account.getEmail());
                         node.put("token", token);
-                        log.info("【{}】正在登录", account.getId());
                         return ServerResponse.status(HttpStatus.CREATED).bodyValue(node);
                       });
             });
