@@ -29,7 +29,6 @@ public class TodoRecordHandler {
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Integer todoId = Integer.valueOf(request.pathVariable("id"));
-    log.info("用户【{}】正在更新任务【{}】进度", userId, todoId);
     Mono<TodoRecordDTO> todoRecordDTO =
         request
             .bodyToMono(TodoRecordDTO.class)
@@ -45,7 +44,6 @@ public class TodoRecordHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-    log.info("【{}】获取 Efficiency 数据", userId);
     ObjectMapper mapper = new ObjectMapper();
     Flux<ObjectNode> objectNodeFlux =
         service
