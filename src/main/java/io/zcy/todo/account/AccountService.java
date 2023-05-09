@@ -25,14 +25,12 @@ public class AccountService {
         .findByEmail(accountDTO.getEmail())
         .defaultIfEmpty(new Account())
         .flatMap(
-                account -> {
+            account -> {
               if (account.getId() != null) {
-                log.info("【{}】已注册", account.getEmail());
                 return Mono.error(new RuntimeException("该邮箱已注册"));
               }
               String passwordHash = BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt(10));
               account = new Account(accountDTO.getName(), accountDTO.getEmail(), passwordHash);
-              log.info("正在注册: {}", account);
               return repository.save(account);
             });
   }
@@ -41,8 +39,7 @@ public class AccountService {
     return repository
         .findById(accountDTO.getId())
         .map(
-                account -> {
-              log.info("【{}】正在更新信息", account.getId());
+            account -> {
               String password = accountDTO.getPassword();
 
               account.setName(accountDTO.getName());
