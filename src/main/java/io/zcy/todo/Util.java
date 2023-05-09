@@ -17,4 +17,6 @@ public class Util {
     }
     return Optional.empty();
   }
+  
+  public record TimeObject(String day, String beginTime, String endTime) {}
 }
