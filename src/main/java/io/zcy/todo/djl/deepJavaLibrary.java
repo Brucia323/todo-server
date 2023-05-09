@@ -61,16 +61,16 @@ public class DeepJavaLibrary {
       NDArray labels = manager.arange(amounts.length);
       NDArray data = manager.create(amounts);
       ArrayDataset arrayDataset =
-          new ArrayDataset.Builder().optLabels(labels).setData(data).setSampling(2, false).build();
+          new ArrayDataset.Builder().optLabels(labels).setData(data).setSampling(1, false).build();
       arrayDataset.prepare(new ProgressBar());
       try (Model model = Model.newInstance("lstm")) {
         model.setBlock(getLSTMModel());
         DefaultTrainingConfig config = setupTrainingConfig();
         try (Trainer trainer = model.newTrainer(config)) {
           trainer.setMetrics(new Metrics());
-          Shape shape = new Shape(1, 1, arrayDataset.size(), 1);
+          Shape shape = new Shape(1, arrayDataset.size(), 1);
           trainer.initialize(shape);
-          EasyTrain.fit(trainer, 1, arrayDataset, null);
+          EasyTrain.fit(trainer, 1, arrayDataset, arrayDataset);
           return trainer.getTrainingResult();
         }
       }
@@ -79,14 +79,6 @@ public class DeepJavaLibrary {
 
   private static Block getLSTMModel() {
     SequentialBlock block = new SequentialBlock();
-    block.addSingleton(
-        input -> {
-          Shape inputShape = input.getShape();
-          long batchSize = inputShape.get(0);
-          long channel = inputShape.get(3);
-          long time = inputShape.size() / (batchSize * channel);
-          return input.reshape(new Shape(batchSize, time, channel));
-        });
     block.add(
         new LSTM.Builder()
             .setStateSize(64)
@@ -112,7 +104,7 @@ public class DeepJavaLibrary {
           model.setProperty("Loss", String.format("%.5f", result.getValidateLoss()));
         });
 
-    return new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
+    return new DefaultTrainingConfig(Loss.maskedSoftmaxCrossEntropyLoss())
         .addEvaluator(new Accuracy())
         .optDevices(Engine.getInstance().getDevices(1))
         .addTrainingListeners(TrainingListener.Defaults.logging(outputDir))
