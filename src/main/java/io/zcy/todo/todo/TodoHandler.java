@@ -4,6 +4,7 @@ import static io.zcy.todo.Util.getTokenFrom;
 
 import com.auth0.jwt.JWT;
 import jakarta.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,6 @@ public class TodoHandler {
   public Mono<ServerResponse> getTodoById(ServerRequest request) {
     log.info("{}", request);
     Integer id = Integer.valueOf(request.pathVariable("id"));
-    log.info("任务【{}】被读取", id);
     Mono<TodoDTO> todoDTO = service.getTodoById(id).map(TodoDTO::new);
     return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
@@ -33,7 +33,6 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-    log.info("用户【{}】正在获取任务列表", userId);
     Flux<TodoDTO> todoDTO = service.getTodosByUser(userId).map(TodoDTO::new);
     return ServerResponse.ok().body(todoDTO, TodoDTO.class);
   }
@@ -45,7 +44,6 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
-    log.info("用户【{}】正在创建任务", userId);
     Mono<TodoDTO> todoDTO =
         request
             .bodyToMono(TodoDTO.class)
@@ -77,7 +75,23 @@ public class TodoHandler {
       return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
     }
     Integer id = Integer.valueOf(request.pathVariable("id"));
-    log.info("任务【{}】正在被删除", id);
     return service.deleteTodo(id).then(ServerResponse.noContent().build());
+  }
+
+  public Mono<ServerResponse> getProgram(ServerRequest request) {
+    log.info("{}", request);
+    Optional<String> token = getTokenFrom(request);
+    if (token.isEmpty()) {
+      return ServerResponse.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    Integer id = JWT.decode(token.get()).getClaim("id").asInt();
+    Flux<TodoDTO> todoDTO = service.getProgram(id).map(TodoDTO::new);
+    return todoDTO
+        .hasElements()
+        .flatMap(
+            hasElements ->
+                hasElements
+                    ? ServerResponse.ok().body(todoDTO, TodoDTO.class)
+                    : ServerResponse.ok().bodyValue(new ArrayList<>().toString()));
   }
 }
