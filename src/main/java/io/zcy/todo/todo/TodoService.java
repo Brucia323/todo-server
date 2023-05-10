@@ -47,6 +47,7 @@ public class TodoService {
         .findById(todoDTO.getId())
         .map(
             todo -> {
+              todo.setName(todoDTO.getName());
               todo.setBeginDate(todoDTO.getBeginDate());
               todo.setPlannedEndDate(todoDTO.getPlannedEndDate());
               todo.setCurrentAmount(todoDTO.getCurrentAmount());
