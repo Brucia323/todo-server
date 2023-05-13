@@ -41,6 +41,8 @@ jobs:
         # allow-checksums: # optional, default is 
     - name: Run chmod to make gradlew executable
       run: chmod +x ./gradlew
+    - name: Gradle Dependency Submission
+      uses: mikepenz/gradle-dependency-submission@v0.8.6
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2.4.2
       with:
