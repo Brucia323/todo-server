@@ -3,6 +3,7 @@ package io.zcy.todo;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 import java.util.Optional;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -17,6 +18,7 @@ public class Util {
     }
     return Optional.empty();
   }
-  
-  public record TimeObject(String day, String beginTime, String endTime) {}
+
+  public record TimeObject(String day, String beginTime, String endTime) {
+  }
 }
