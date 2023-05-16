@@ -1,6 +1,7 @@
 package io.zcy.todo.todo.record;
 
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,8 @@ public class TodoRecordDTO {
   private LocalDateTime createTime;
   private LocalDateTime updateTime;
 
-  public TodoRecordDTO() {}
+  public TodoRecordDTO() {
+  }
 
   public TodoRecordDTO(
       Integer id, Integer currentAmount, LocalDateTime createTime, LocalDateTime updateTime) {
