@@ -1,27 +1,33 @@
 package io.zcy.todo.account;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
 @ToString
 public class Account {
-  @Id private Integer id;
+  @Id
+  private Integer id;
   private String name;
   private String email;
-  @JsonIgnore private String passwordHash;
+  @JsonIgnore
+  private String passwordHash;
   private String timePerWeek;
 
   private LocalDateTime createTime = LocalDateTime.now();
 
   private LocalDateTime updateTime = LocalDateTime.now();
 
-  public Account() {}
+  public Account() {
+  }
 
   public Account(String name, String email, String passwordHash) {
     this.name = name;
