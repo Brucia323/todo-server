@@ -1,24 +1,27 @@
 package io.zcy.todo.todo.record;
 
 import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.Id;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
 @ToString
 public class TodoRecord {
-  @Id private Integer id;
+  @Id
+  private Integer id;
   private Integer userId;
   private Integer todoId;
   private Integer amount;
   private LocalDateTime createTime = LocalDateTime.now();
   private LocalDateTime updateTime = LocalDateTime.now();
 
-  public TodoRecord() {}
+  public TodoRecord() {
+  }
 
   public TodoRecord(Integer userId, Integer todoId, Integer amount) {
     this.userId = userId;
