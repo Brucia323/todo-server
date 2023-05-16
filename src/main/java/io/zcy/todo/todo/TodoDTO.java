@@ -1,11 +1,11 @@
 package io.zcy.todo.todo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,7 +23,8 @@ public class TodoDTO {
   private LocalDateTime createTime;
   private LocalDateTime updateTime;
 
-  public TodoDTO() {}
+  public TodoDTO() {
+  }
 
   public TodoDTO(
       Integer id,
