@@ -1,16 +1,18 @@
 package io.zcy.todo.account;
 
 import jakarta.annotation.Resource;
-import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 public class AccountService {
-  @Resource private AccountRepository repository;
+  @Resource
+  private AccountRepository repository;
 
   public Mono<Account> getUserById(Integer id) {
     return repository.findById(id);
@@ -66,5 +68,9 @@ public class AccountService {
     long round = Math.round(v);
     log.info("验证码是【{}】", round);
     return Mono.just(String.valueOf(round));
+  }
+
+  public Mono<Boolean> checkPassword(Integer id, String password) {
+    return repository.findById(id).map(Account::getPasswordHash).map(passwordHash -> BCrypt.checkpw(password, passwordHash));
   }
 }
