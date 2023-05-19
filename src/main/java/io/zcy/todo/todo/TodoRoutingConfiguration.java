@@ -13,12 +13,12 @@ public class TodoRoutingConfiguration {
   @Bean
   public RouterFunction<ServerResponse> TodoRouterFunction(TodoHandler todoHandler) {
     return route()
-        .GET("/todo", ACCEPT_JSON, todoHandler::getTodos)
-        .GET("/todo/{id}", ACCEPT_JSON, todoHandler::getTodoById)
-        .GET("/program", ACCEPT_JSON, todoHandler::getProgram)
-        .POST("/todo", ACCEPT_JSON, todoHandler::createTodo)
-        .PUT("/todo/{id}", ACCEPT_JSON, todoHandler::updateTodo)
-        .DELETE("/todo/{id}", ACCEPT_JSON, todoHandler::deleteTodo)
-        .build();
+      .GET("/todo", ACCEPT_JSON, todoHandler::getTodos)
+      .GET("/todo/{id}", ACCEPT_JSON, todoHandler::getTodoById)
+      .GET("/program", ACCEPT_JSON, todoHandler::getProgram)
+      .POST("/todo", ACCEPT_JSON, todoHandler::createTodo)
+      .PUT("/todo/{id}", ACCEPT_JSON, todoHandler::updateTodo)
+      .DELETE("/todo/{id}", ACCEPT_JSON, todoHandler::deleteTodo)
+      .build();
   }
 }
