@@ -34,15 +34,15 @@ public class TodoRecordHandler {
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Integer todoId = Integer.valueOf(request.pathVariable("id"));
     Mono<TodoRecordDTO> todoRecordDTO = request
-        .bodyToMono(TodoRecordDTO.class)
-        .flatMap(todoRecordDTO1 -> service.createTodoRecord(todoRecordDTO1, userId, todoId))
-        .map(TodoRecordDTO::new);
+      .bodyToMono(TodoRecordDTO.class)
+      .flatMap(todoRecordDTO1 -> service.createTodoRecord(todoRecordDTO1, userId, todoId))
+      .map(TodoRecordDTO::new);
     return ServerResponse.status(HttpStatus.CREATED).body(todoRecordDTO, TodoRecordDTO.class);
   }
 
   /**
    * 此函数为按日期分组的用户待办事项记录生成效率数据，并将其作为 ServerResponse 中的 JSON 对象的 Flux 返回。
-   * 
+   *
    * @param request 包含有关传入 HTTP 请求的信息的请求对象，例如标头、查询参数和请求正文。
    * @return 正在返回 ServerResponse 的 Mono。
    */
@@ -74,34 +74,34 @@ public class TodoRecordHandler {
     ObjectMapper mapper = new ObjectMapper();
     // 此代码为按日期分组的用户待办事项记录生成效率数据，并在 ServerResponse 中将其作为 JSON 对象的 Flux 返回。
     Flux<ObjectNode> objectNodeFlux = service
-        .getTodoRecordsByUserId(userId)
-        .groupBy(todoRecord -> todoRecord.getCreateTime().toLocalDate())
-        .flatMap(
-            group -> group.reduce(
-                (r1, r2) -> new TodoRecord(r1.getAmount() + r2.getAmount(), r1.getCreateTime())))
-        .sort(Comparator.comparing(a -> a.getCreateTime().toLocalDate()))
-        .map(
-            todoRecord -> {
-              // `ObjectNode node = mapper.createObjectNode();` 使用 Jackson `ObjectMapper`
-              // 类创建一个新的
-              // JSON 对象。 `ObjectMapper` 用于将 Java 对象转换为 JSON，反之亦然。在本例中，它用于创建一个新的 `ObjectNode`
-              // JSON
-              // 对象，该对象可用于构建 JSON 响应。
-              ObjectNode node = mapper.createObjectNode();
-              // `node.put("amount", todoRecord.getAmount());` 将键值对添加到 JSON 对象
-              // `node`。键是“amount”，值是使用“getAmount()”方法检索的“todoRecord”对象的数量。这行代码用于创建一个 JSON
-              // 对象，该对象表示特定日期的效率数据。
-              node.put("amount", todoRecord.getAmount());
-              // `node.put("time", todoRecord.getCreateTime().toLocalDate().toString());`
-              // 将键值对添加到 JSON 对象 `node`。
-              // 键是“time”，值是“todoRecord”对象的“createTime”属性的日期，使用“LocalDate”类的“toString()”方法转换为字符串。这用于创建表示特定日期的效率数据的
-              // JSON 对象。
-              node.put("time", todoRecord.getCreateTime().toLocalDate().toString());
-              // `return node;` 返回一个使用 Jackson `ObjectMapper` 类创建的 JSON 对象 (`ObjectNode`)。
-              // `node`
-              // 对象包含两个键值对：“金额”和“时间”。 “金额”表示特定日期的效率数据，“时间”表示日期本身。此 JSON 对象用于表示响应正文中特定日期的效率数据。
-              return node;
-            });
+      .getTodoRecordsByUserId(userId)
+      .groupBy(todoRecord -> todoRecord.getCreateTime().toLocalDate())
+      .flatMap(
+        group -> group.reduce(
+          (r1, r2) -> new TodoRecord(r1.getAmount() + r2.getAmount(), r1.getCreateTime())))
+      .sort(Comparator.comparing(a -> a.getCreateTime().toLocalDate()))
+      .map(
+        todoRecord -> {
+          // `ObjectNode node = mapper.createObjectNode();` 使用 Jackson `ObjectMapper`
+          // 类创建一个新的
+          // JSON 对象。 `ObjectMapper` 用于将 Java 对象转换为 JSON，反之亦然。在本例中，它用于创建一个新的 `ObjectNode`
+          // JSON
+          // 对象，该对象可用于构建 JSON 响应。
+          ObjectNode node = mapper.createObjectNode();
+          // `node.put("amount", todoRecord.getAmount());` 将键值对添加到 JSON 对象
+          // `node`。键是“amount”，值是使用“getAmount()”方法检索的“todoRecord”对象的数量。这行代码用于创建一个 JSON
+          // 对象，该对象表示特定日期的效率数据。
+          node.put("amount", todoRecord.getAmount());
+          // `node.put("time", todoRecord.getCreateTime().toLocalDate().toString());`
+          // 将键值对添加到 JSON 对象 `node`。
+          // 键是“time”，值是“todoRecord”对象的“createTime”属性的日期，使用“LocalDate”类的“toString()”方法转换为字符串。这用于创建表示特定日期的效率数据的
+          // JSON 对象。
+          node.put("time", todoRecord.getCreateTime().toLocalDate().toString());
+          // `return node;` 返回一个使用 Jackson `ObjectMapper` 类创建的 JSON 对象 (`ObjectNode`)。
+          // `node`
+          // 对象包含两个键值对：“金额”和“时间”。 “金额”表示特定日期的效率数据，“时间”表示日期本身。此 JSON 对象用于表示响应正文中特定日期的效率数据。
+          return node;
+        });
     // 这行代码返回状态为“200 OK”的“ServerResponse”和包含“ObjectNode”JSON 对象的 Flux 的正文。
     // objectNodeFlux是将用户的todo记录按日期分组归约生成效率数据。 `ObjectMapper` 用于根据数据创建 `ObjectNode`
     // JSON
