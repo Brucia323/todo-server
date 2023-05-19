@@ -12,10 +12,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class TodoRecordRoutingConfiguration {
   @Bean
   public RouterFunction<ServerResponse> TodoRecordRouterFunction(
-      TodoRecordHandler todoRecordHandler) {
+    TodoRecordHandler todoRecordHandler) {
     return route()
-        .POST("/todo/{id}", ACCEPT_JSON, todoRecordHandler::createTodoRecord)
-        .GET("/efficiency", ACCEPT_JSON, todoRecordHandler::generateEfficiency)
-        .build();
+      .POST("/todo/{id}", ACCEPT_JSON, todoRecordHandler::createTodoRecord)
+      .GET("/efficiency", ACCEPT_JSON, todoRecordHandler::generateEfficiency)
+      .build();
   }
 }
