@@ -22,13 +22,13 @@ public class AccountDTO {
   }
 
   public AccountDTO(
-      Integer id,
-      String name,
-      String email,
-      String password,
-      String timePerWeek,
-      LocalDateTime createTime,
-      LocalDateTime updateTime) {
+    Integer id,
+    String name,
+    String email,
+    String password,
+    String timePerWeek,
+    LocalDateTime createTime,
+    LocalDateTime updateTime) {
     this.id = id;
     this.name = name;
     this.email = email;
