@@ -30,12 +30,12 @@ public class Todo {
   }
 
   public Todo(
-      Integer userId,
-      String name,
-      LocalDate beginDate,
-      LocalDate plannedEndDate,
-      Integer totalAmount,
-      String description) {
+    Integer userId,
+    String name,
+    LocalDate beginDate,
+    LocalDate plannedEndDate,
+    Integer totalAmount,
+    String description) {
     this.userId = userId;
     this.name = name;
     this.beginDate = beginDate;
@@ -45,17 +45,17 @@ public class Todo {
   }
 
   public Todo(
-      Integer id,
-      Integer userId,
-      String name,
-      LocalDate beginDate,
-      LocalDate plannedEndDate,
-      LocalDate actualEndDate,
-      Integer currentAmount,
-      Integer totalAmount,
-      String description,
-      LocalDateTime createTime,
-      LocalDateTime updateTime) {
+    Integer id,
+    Integer userId,
+    String name,
+    LocalDate beginDate,
+    LocalDate plannedEndDate,
+    LocalDate actualEndDate,
+    Integer currentAmount,
+    Integer totalAmount,
+    String description,
+    LocalDateTime createTime,
+    LocalDateTime updateTime) {
     this.id = id;
     this.userId = userId;
     this.name = name;
