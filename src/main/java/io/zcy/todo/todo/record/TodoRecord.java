@@ -35,12 +35,12 @@ public class TodoRecord {
   }
 
   public TodoRecord(
-      Integer id,
-      Integer userId,
-      Integer todoId,
-      Integer amount,
-      LocalDateTime createTime,
-      LocalDateTime updateTime) {
+    Integer id,
+    Integer userId,
+    Integer todoId,
+    Integer amount,
+    LocalDateTime createTime,
+    LocalDateTime updateTime) {
     this.id = id;
     this.userId = userId;
     this.todoId = todoId;
