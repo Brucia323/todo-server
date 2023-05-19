@@ -27,17 +27,17 @@ public class TodoDTO {
   }
 
   public TodoDTO(
-      Integer id,
-      Integer userId,
-      String name,
-      LocalDate beginDate,
-      LocalDate plannedEndDate,
-      LocalDate actualEndDate,
-      Integer currentAmount,
-      Integer totalAmount,
-      String description,
-      LocalDateTime createTime,
-      LocalDateTime updateTime) {
+    Integer id,
+    Integer userId,
+    String name,
+    LocalDate beginDate,
+    LocalDate plannedEndDate,
+    LocalDate actualEndDate,
+    Integer currentAmount,
+    Integer totalAmount,
+    String description,
+    LocalDateTime createTime,
+    LocalDateTime updateTime) {
     this.id = id;
     this.userId = userId;
     this.name = name;
