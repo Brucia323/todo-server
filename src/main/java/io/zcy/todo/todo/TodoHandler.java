@@ -49,14 +49,14 @@ public class TodoHandler {
     }
     Integer userId = JWT.decode(token.get()).getClaim("id").asInt();
     Mono<TodoDTO> todoDTO = request
-        .bodyToMono(TodoDTO.class)
-        .map(
-            todoDTO1 -> {
-              todoDTO1.setUserId(userId);
-              return todoDTO1;
-            })
-        .flatMap(service::createTodo)
-        .map(TodoDTO::new);
+      .bodyToMono(TodoDTO.class)
+      .map(
+        todoDTO1 -> {
+          todoDTO1.setUserId(userId);
+          return todoDTO1;
+        })
+      .flatMap(service::createTodo)
+      .map(TodoDTO::new);
     return ServerResponse.status(HttpStatus.CREATED).body(todoDTO, TodoDTO.class);
   }
 
@@ -82,7 +82,7 @@ public class TodoHandler {
 
   /**
    * 此函数基于令牌检索程序并返回 TodoDTO 对象列表或如果没有元素则返回空列表。
-   * 
+   *
    * @param request 请求对象表示服务器接收到的传入 HTTP 请求。它包含 HTTP 方法、标头、查询参数和请求正文等信息。
    * @return 该方法返回一个 ServerResponse 的 Mono。
    */
@@ -117,10 +117,10 @@ public class TodoHandler {
     // `Mono<Boolean>` 转换为
     // `Mono<ServerResponse>`。
     return todoDTO
-        .hasElements()
-        .flatMap(
-            hasElements -> hasElements
-                ? ServerResponse.ok().body(todoDTO, TodoDTO.class)
-                : ServerResponse.ok().bodyValue(new ArrayList<>().toString()));
+      .hasElements()
+      .flatMap(
+        hasElements -> hasElements
+          ? ServerResponse.ok().body(todoDTO, TodoDTO.class)
+          : ServerResponse.ok().bodyValue(new ArrayList<>().toString()));
   }
 }
