@@ -36,13 +36,13 @@ public class Account {
   }
 
   public Account(
-    Integer id,
-    String name,
-    String email,
-    String passwordHash,
-    String timePerWeek,
-    LocalDateTime createTime,
-    LocalDateTime updateTime) {
+      Integer id,
+      String name,
+      String email,
+      String passwordHash,
+      String timePerWeek,
+      LocalDateTime createTime,
+      LocalDateTime updateTime) {
     this.id = id;
     this.name = name;
     this.email = email;
