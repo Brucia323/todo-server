@@ -19,7 +19,7 @@ public class TodoRecordDTO {
   }
 
   public TodoRecordDTO(
-    Integer id, Integer currentAmount, LocalDateTime createTime, LocalDateTime updateTime) {
+      Integer id, Integer currentAmount, LocalDateTime createTime, LocalDateTime updateTime) {
     this.id = id;
     this.currentAmount = currentAmount;
     this.createTime = createTime;
